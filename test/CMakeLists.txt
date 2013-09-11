@@ -6,7 +6,7 @@
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${Boost_ROOT_DIR})
 
-FOREACH(name heatbath markov metropolis random_choice st2010)
+FOREACH(name heatbath markov metropolis random_choice random_shuffle st2010)
   add_executable(${name} ${name}.cpp)
   add_alps_test(${name})
 ENDFOREACH(name)

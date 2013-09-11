@@ -2,7 +2,7 @@
 *
 * BCL: Balance Condition Library
 *
-* Copyright (C) 2009-2012 by Hidemaro Suwa <suwamaro@looper.t.u-tokyo.ac.jp>,
+* Copyright (C) 2009-2013 by Hidemaro Suwa <suwamaro@looper.t.u-tokyo.ac.jp>,
 *                            Synge Todo <wistaria@comp-phys.org>
 *
 * Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -10,16 +10,9 @@
 *
 *****************************************************************************/
 
-#ifndef BCL_HPP
-#define BCL_HPP
+#ifndef BCL_VERSION_HPP
+#define BCL_VERSION_HPP
 
-#include "bcl/condition.hpp"
-#include "bcl/heatbath.hpp"
-#include "bcl/markov.hpp"
-#include "bcl/metropolis.hpp"
-#include "bcl/observable.hpp"
-#include "bcl/random_choice.hpp"
-#include "bcl/random_shuffle.hpp"
-#include "bcl/st2010.hpp"
+#define BCL_VERSION "0.1"
 
-#endif // BCL_HPP
+#endif // BCL_VERSION_HPP
