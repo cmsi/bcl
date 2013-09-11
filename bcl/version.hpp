@@ -13,6 +13,6 @@
 #ifndef BCL_VERSION_HPP
 #define BCL_VERSION_HPP
 
-#define BCL_VERSION
+#define BCL_VERSION "0.1"
 
 #endif // BCL_VERSION_HPP
