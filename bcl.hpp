@@ -17,7 +17,9 @@
 #include "bcl/heatbath.hpp"
 #include "bcl/markov.hpp"
 #include "bcl/metropolis.hpp"
+#include "bcl/observable.hpp"
 #include "bcl/random_choice.hpp"
+#include "bcl/random_shuffle.hpp"
 #include "bcl/st2010.hpp"
 
 #endif // BCL_HPP
