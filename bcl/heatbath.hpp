@@ -38,7 +38,7 @@ public:
     generate_transition_matrix(weights, tm);
   }
   template<class VEC, class RNG>
-  static std::size_t choose_next(VEC const& weights, RNG& rng){
+  static std::size_t choose_next(VEC const& weights, int /* present */, RNG& rng){
     double sum = std::accumulate(weights.begin(), weights.end(), 0.0);
     double target = sum * rng();
     sum = 0;

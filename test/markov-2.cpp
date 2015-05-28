@@ -15,7 +15,8 @@
 #include <iostream>
 #include <vector>
 
-static const unsigned int n = 13;
+//static const unsigned int n = 15;
+static const unsigned int n = 2;
 static const unsigned int samples = 10000000;
 
 int main() {
@@ -35,7 +36,8 @@ try {
 
   // generate weights
   std::vector<double> weights(n);
-  for (int i = 0; i < n; ++i) weights[i] = std::pow(rng(), 3.0);
+  // for (int i = 0; i < n; ++i) weights[i] = std::pow(rng(), 3.0);
+  for (int i = 0; i < n; ++i) weights[i] = 1.0 + 0.001 * rng();
   double total = std::accumulate(weights.begin(), weights.end(), 0.0);
   std::cout << "[weights]\n";
   for (std::size_t i = 0; i < n; ++i) std::cout << weights[i] << ' ';

@@ -54,7 +54,7 @@ public:
   template<class VEC, class RNG>
   static std::size_t choose_next(VEC const& weights, std::size_t present, RNG& rng) {
     std::size_t proposal = weights.size() * rng();
-    return (weights(present) * rng() < weights(proposal)) ? proposal : present;
+    return (weights[present] * rng() < weights[proposal]) ? proposal : present;
   }
 };
 
