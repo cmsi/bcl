@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 namespace bcl {
 
@@ -35,6 +36,17 @@ public:
     tm.resize(n);
     for (int i = 0; i < n; ++i) tm[i].resize(n);
     generate_transition_matrix(weights, tm);
+  }
+  template<class VEC, class RNG>
+  static std::size_t choose_next(VEC const& weights, RNG& rng){
+    double sum = std::accumulate(weights.begin(), weights.end(), 0.0);
+    double target = sum * rng();
+    sum = 0;
+    for (int i = 0; i < weights.size(); ++i) {
+      sum += weights[i];
+      if (target <= sum) return i;
+    }
+    return weights.size() - 1;
   }
 };
   
