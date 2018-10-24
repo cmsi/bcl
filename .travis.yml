@@ -1,5 +1,10 @@
 language: cpp
 
+addons:
+  apt:
+    packages:
+      - libboost-all-dev
+
 install: true
 
 script:
