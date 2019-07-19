@@ -17,5 +17,5 @@ The goal of the BCL is providing
 
 ## Developers
 
-- Hidemaro Suwa (Boston University)
+- Hidemaro Suwa (University of Tokyo)
 - Synge Todo (University of Tokyo)
