@@ -204,15 +204,16 @@ inline void fill_walker1977(WVEC const& weights, std::vector<std::pair<CutoffTyp
   }
 }
 
+template<class CutoffType, class IntType, class RealType, class Enable = void>
+class random_choice_walker;
+
 //
 // double-based Walker algorithm
 //
 
 template<class CutoffType, class IntType, class RealType>
-class random_choice_walker;
-
-template<class IntType, class RealType>
-class random_choice_walker<double, IntType, RealType> {
+class random_choice_walker<CutoffType, IntType, RealType,
+  typename std::enable_if<std::is_floating_point<CutoffType>::value>::type> {
 public:
   typedef RealType input_type;
   typedef IntType result_type;
@@ -247,8 +248,9 @@ private:
 // optimized integer-based version of Walker algorithm
 //
 
-template<class IntType, class RealType>
-class random_choice_walker<unsigned int, IntType, RealType> {
+template<class CutoffType, class IntType, class RealType>
+class random_choice_walker<CutoffType, IntType, RealType,
+  typename std::enable_if<std::is_integral<CutoffType>::value>::type> {
 public:
   typedef IntType input_type;
   typedef IntType result_type;
