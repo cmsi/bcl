@@ -58,7 +58,7 @@ public:
     std::uniform_real_distribution<> dist;
     double sum = *(std::max_element(weights.begin(), weights.end()));
     sum -= weights[present] * dist(eng);
-    for (int i = 0; i < weights.size(); ++i) {
+    for (std::size_t i = 0; i < weights.size(); ++i) {
       int j = (present + i + 1) % weights.size();
       if (sum <= weights[j]) return j;
       sum -= weights[j];

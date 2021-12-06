@@ -31,15 +31,15 @@ public:
   static void generate_transition_matrix(VEC const& weights, MAT& tm) {
     typedef typename VEC::value_type value_type;
     value_type sum = std::accumulate(weights.begin(), weights.end(), value_type(0));
-    int n = weights.size();
-    for (int i = 0; i < n; ++i)
-      for (int j = 0; j < n; ++j) tm[i][j] = weights[j] / sum;
+    std::size_t n = weights.size();
+    for (std::size_t i = 0; i < n; ++i)
+      for (std::size_t j = 0; j < n; ++j) tm[i][j] = weights[j] / sum;
   }
   template<class VEC, class MAT>
   static void generate_transition_matrix_resize(VEC const& weights, MAT& tm) {
-    int n = weights.size();
+    std::size_t n = weights.size();
     tm.resize(n);
-    for (int i = 0; i < n; ++i) tm[i].resize(n);
+    for (std::size_t i = 0; i < n; ++i) tm[i].resize(n);
     generate_transition_matrix(weights, tm);
   }
   template<class VEC, class ENGINE>
@@ -48,7 +48,7 @@ public:
     double sum = std::accumulate(weights.begin(), weights.end(), 0.0);
     double target = sum * dist(eng);
     sum = 0;
-    for (int i = 0; i < weights.size(); ++i) {
+    for (std::size_t i = 0; i < weights.size(); ++i) {
       sum += weights[i];
       if (target <= sum) return i;
     }

@@ -35,11 +35,10 @@ try {
 
   // generate weights
   std::vector<double> weights(n);
-  // for (int i = 0; i < n; ++i) weights[i] = std::pow(dist(eng), 3.0);
-  for (int i = 0; i < n; ++i) weights[i] = 1.0 + 0.001 * dist(eng);
+  for (auto& w : weights) w = 1.0 + 0.001 * dist(eng);
   double total = std::accumulate(weights.begin(), weights.end(), 0.0);
   std::cout << "[weights]\n";
-  for (std::size_t i = 0; i < n; ++i) std::cout << weights[i] << ' ';
+  for (auto& w : weights) std::cout << w << ' ';
   std::cout << std::endl;
 
   // generate markov chain
