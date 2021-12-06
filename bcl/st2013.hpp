@@ -1,19 +1,23 @@
-/*****************************************************************************
-*
-* BCL: Balance Condition Library
-*
-* Copyright (C) 2009-2013 by Hidemaro Suwa <suwamaro@looper.t.u-tokyo.ac.jp>,
-*                            Synge Todo <wistaria@comp-phys.org>
-*
-* Distributed under the Boost Software License, Version 1.0. (See accompanying
-* file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-*
-*****************************************************************************/
+/*
+   Copyright (C) 2009-2021 by Synge Todo <wistaria@phys.s.u-tokyo.ac.jp>,
+                              Hidemaro Suwa <suwamaro@phys.s.u-tokyo.ac.jp>
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
 
 // ST2013: Rejection optimized reversible kernel (symmetrized version of ST2010)
 
-#ifndef BCL_ST2013_H
-#define BCL_ST2013_H
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -58,10 +62,11 @@ public:
     generate_transition_matrix(weights, tm);
   }
     
-  // template<class VEC, class RNG>
-  // static std::size_t choose_next(VEC const& weights, std::size_t present, RNG& rng){
+  // template<class VEC, class ENGINE>
+  // static std::size_t choose_next(VEC const& weights, std::size_t present, ENGINE& eng){
+  //   std::uniform_real_distribution<> dist;
   //   double sum = *(std::max_element(weights.begin(), weights.end()));
-  //   sum -= weights[present] * rng();
+  //   sum -= weights[present] * dist(eng);
   //   for (int i = 0; i < weights.size(); ++i) {
   //     int j = (present + i + 1) % weights.size();
   //     if (sum <= weights[j]) return j;
@@ -72,5 +77,3 @@ public:
 };
 
 } // end namespace bcl
-
-#endif // BCL_ST2013_H

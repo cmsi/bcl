@@ -1,43 +1,42 @@
-/*****************************************************************************
-*
-* BCL: Balance Condition Library
-*
-* Copyright (C) 2011-2012 by Hidemaro Suwa <suwamaro@looper.t.u-tokyo.ac.jp>,
-*                            Synge Todo <wistaria@comp-phys.org>
-*
-* Distributed under the Boost Software License, Version 1.0. (See accompanying
-* file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-*
-*****************************************************************************/
+/*
+   Copyright (C) 2009-2021 by Synge Todo <wistaria@phys.s.u-tokyo.ac.jp>,
+                              Hidemaro Suwa <suwamaro@phys.s.u-tokyo.ac.jp>
 
-#include <bcl.hpp>
-#include <boost/random.hpp>
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
 #include <iostream>
+#include <random>
 #include <vector>
+#include "bcl.hpp"
 
-//static const unsigned int n = 15;
 static const unsigned int n = 2;
 static const unsigned int samples = 10000000;
 
 int main() {
-
-#ifndef BOOST_NO_EXCEPTIONS
 try {
-#endif
-
   std::cout << "number of bins = " << n << std::endl;
   std::cout << "number of samples = " << samples << std::endl;
 
   // random number generator
-  typedef boost::mt19937 engine_type;
-  typedef boost::variate_generator<boost::mt19937&, boost::uniform_real<> > generator_type;
-  engine_type eng(29410);
-  generator_type rng(eng, boost::uniform_real<>());
+  typedef std::mt19937 engine_type;
+  engine_type eng(29411);
+  std::uniform_real_distribution<> dist;
 
   // generate weights
   std::vector<double> weights(n);
-  // for (int i = 0; i < n; ++i) weights[i] = std::pow(rng(), 3.0);
-  for (int i = 0; i < n; ++i) weights[i] = 1.0 + 0.001 * rng();
+  // for (int i = 0; i < n; ++i) weights[i] = std::pow(dist(eng), 3.0);
+  for (int i = 0; i < n; ++i) weights[i] = 1.0 + 0.001 * dist(eng);
   double total = std::accumulate(weights.begin(), weights.end(), 0.0);
   std::cout << "[weights]\n";
   for (std::size_t i = 0; i < n; ++i) std::cout << weights[i] << ' ';
@@ -47,9 +46,9 @@ try {
   int x = 0;
   {
     std::cout << "[Metropolis]\n";
-    bcl::markov<generator_type> mc(bcl::metropolis(), weights);
+    bcl::markov<engine_type> mc(bcl::metropolis(), weights);
     std::vector<double> accum(n, 0);
-    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, rng)];
+    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, eng)];
     std::cout << "bin\tweight\t\tresult\t\tdiff\t\tsigma\t\tdiff/sigma\n";
     for (unsigned int i = 0; i < n; ++i) {
       double diff = std::abs((weights[i] / total) - (accum[i] / samples));
@@ -63,7 +62,7 @@ try {
     std::cout << "[Metropolis (choose_next)]\n";
     std::vector<double> accum(n, 0);
     for (unsigned int t = 0; t < samples; ++t)
-      ++accum[x = bcl::metropolis::choose_next(weights, x, rng)];
+      ++accum[x = bcl::metropolis::choose_next(weights, x, eng)];
     std::cout << "bin\tweight\t\tresult\t\tdiff\t\tsigma\t\tdiff/sigma\n";
     for (unsigned int i = 0; i < n; ++i) {
       double diff = std::abs((weights[i] / total) - (accum[i] / samples));
@@ -75,9 +74,9 @@ try {
   }
   {
     std::cout << "[heat bath]\n";
-    bcl::markov<generator_type> mc(bcl::heatbath(), weights);
+    bcl::markov<engine_type> mc(bcl::heatbath(), weights);
     std::vector<double> accum(n, 0);
-    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, rng)];
+    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, eng)];
     std::cout << "bin\tweight\t\tresult\t\tdiff\t\tsigma\t\tdiff/sigma\n";
     for (unsigned int i = 0; i < n; ++i) {
       double diff = std::abs((weights[i] / total) - (accum[i] / samples));
@@ -91,7 +90,7 @@ try {
     std::cout << "[heat bath (choose_next)]\n";
     std::vector<double> accum(n, 0);
     for (unsigned int t = 0; t < samples; ++t)
-      ++accum[x = bcl::heatbath::choose_next(weights, x, rng)];
+      ++accum[x = bcl::heatbath::choose_next(weights, x, eng)];
     std::cout << "bin\tweight\t\tresult\t\tdiff\t\tsigma\t\tdiff/sigma\n";
     for (unsigned int i = 0; i < n; ++i) {
       double diff = std::abs((weights[i] / total) - (accum[i] / samples));
@@ -103,9 +102,9 @@ try {
   }
   {
     std::cout << "[Suwa-Todo 2010]\n";
-    bcl::markov<generator_type> mc(bcl::st2010(), weights);
+    bcl::markov<engine_type> mc(bcl::st2010(), weights);
     std::vector<double> accum(n, 0);
-    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, rng)];
+    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, eng)];
     std::cout << "bin\tweight\t\tresult\t\tdiff\t\tsigma\t\tdiff/sigma\n";
     for (unsigned int i = 0; i < n; ++i) {
       double diff = std::abs((weights[i] / total) - (accum[i] / samples));
@@ -119,7 +118,7 @@ try {
     std::cout << "[Suwa-Todo 2010 (choose_next)]\n";
     std::vector<double> accum(n, 0);
     for (unsigned int t = 0; t < samples; ++t)
-      ++accum[x = bcl::st2010::choose_next(weights, x, rng)];
+      ++accum[x = bcl::st2010::choose_next(weights, x, eng)];
     std::cout << "bin\tweight\t\tresult\t\tdiff\t\tsigma\t\tdiff/sigma\n";
     for (unsigned int i = 0; i < n; ++i) {
       double diff = std::abs((weights[i] / total) - (accum[i] / samples));
@@ -131,9 +130,9 @@ try {
   }
   {
     std::cout << "[Suwa-Todo 2013]\n";
-    bcl::markov<generator_type> mc(bcl::st2013(), weights);
+    bcl::markov<engine_type> mc(bcl::st2013(), weights);
     std::vector<double> accum(n, 0);
-    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, rng)];
+    for (unsigned int t = 0; t < samples; ++t) ++accum[x = mc(x, eng)];
     std::cout << "bin\tweight\t\tresult\t\tdiff\t\tsigma\t\tdiff/sigma\n";
     for (unsigned int i = 0; i < n; ++i) {
       double diff = std::abs((weights[i] / total) - (accum[i] / samples));
@@ -143,8 +142,6 @@ try {
                 << sigma << "    \t" << (diff / sigma) << std::endl;
     }
   }
-  
-#ifndef BOOST_NO_EXCEPTIONS
 }
 catch (const std::exception& excp) {
   std::cerr << excp.what() << std::endl;
@@ -152,5 +149,4 @@ catch (const std::exception& excp) {
 catch (...) {
   std::cerr << "Unknown exception occurred!" << std::endl;
   std::exit(-1); }
-#endif
 }

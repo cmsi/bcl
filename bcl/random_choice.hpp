@@ -1,29 +1,30 @@
-/*****************************************************************************
-*
-* BCL: Balance Condition Library
-*
-* Copyright (C) 2006-2014 by Synge Todo <wistaria@comp-phys.org>
-*
-* Distributed under the Boost Software License, Version 1.0. (See accompanying
-* file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-*
-*****************************************************************************/
+/*
+   Copyright (C) 2009-2021 by Synge Todo <wistaria@phys.s.u-tokyo.ac.jp>,
+                              Hidemaro Suwa <suwamaro@phys.s.u-tokyo.ac.jp>
 
-#ifndef BCL_RANDOM_CHOICE_HPP
-#define BCL_RANDOM_CHOICE_HPP
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-#include <boost/foreach.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/throw_exception.hpp>
-#include <boost/type_traits.hpp>
-#include <boost/utility/enable_if.hpp>
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+#pragma once
+
 #include <cmath>
+#include <iostream>
 #include <limits>
 #include <numeric>
 #include <stdexcept>
+#include <type_traits>
 #include <utility>
 #include <vector>
-#include <iostream>
 
 namespace bcl {
 
@@ -38,7 +39,7 @@ inline bool check_table(WVEC const& weights,
   tol *= n;
   double norm = m / std::accumulate(weights.begin(), weights.end(), double(0));
   double nm = 1;
-  if (boost::is_integral<CutoffType>::value) nm /= std::numeric_limits<CutoffType>::max();
+  if (std::is_integral<CutoffType>::value) nm /= std::numeric_limits<CutoffType>::max();
   for (IndexType i = 0; i < n; ++i) {
     double p = nm * table[i].first;
     for (IndexType j = 0; j < m; ++j)
@@ -49,22 +50,21 @@ inline bool check_table(WVEC const& weights,
 }
 
 // Initialization routine with complexity O(N)
-template<typename WVEC, typename CutoffType, typename IndexType>
-inline void fill_ft2009(WVEC const& weights, std::vector<std::pair<CutoffType, IndexType> >& table,
-  typename boost::enable_if<boost::is_float<CutoffType> >::type* = 0,
-  typename boost::enable_if<boost::is_integral<IndexType> >::type* = 0) {
-  
+template<typename WVEC, typename CutoffType, typename IndexType,
+  std::enable_if_t<std::is_floating_point<CutoffType>::value, std::nullptr_t> = nullptr,
+  std::enable_if_t<std::is_integral<IndexType>::value, std::nullptr_t> = nullptr>
+inline void fill_ft2009(WVEC const& weights, std::vector<std::pair<CutoffType, IndexType> >& table) {
   if (weights.size() == 0)
-    boost::throw_exception(std::invalid_argument("fill_ft2009"));
+    throw std::invalid_argument("fill_ft2009");
   std::size_t n = weights.size();
   CutoffType norm = CutoffType(0);
-  BOOST_FOREACH(CutoffType w, weights) {
+  for (auto w : weights) {
     if (w < CutoffType(0))
-      boost::throw_exception(std::invalid_argument("fill_ft2009"));
+      throw std::invalid_argument("fill_ft2009");
     norm += w;
   }
   if (norm <= CutoffType(0))
-    boost::throw_exception(std::invalid_argument("fill_ft2009"));
+    throw std::invalid_argument("fill_ft2009");
   norm = n / norm;
 
   // Initialize arrays.  We will reorder the elements in `array', so
@@ -98,24 +98,24 @@ inline void fill_ft2009(WVEC const& weights, std::vector<std::pair<CutoffType, I
   }
 }
   
-template<typename WVEC, typename CutoffType, typename IndexType>
-inline void fill_ft2009(WVEC const& weights, std::vector<std::pair<CutoffType, IndexType> >& table,
-  typename boost::enable_if<boost::is_integral<CutoffType> >::type* = 0,
-  typename boost::enable_if<boost::is_integral<IndexType> >::type* = 0) {
+template<typename WVEC, typename CutoffType, typename IndexType,
+  std::enable_if_t<std::is_integral<CutoffType>::value, std::nullptr_t> = nullptr,
+  std::enable_if_t<std::is_integral<IndexType>::value, std::nullptr_t> = nullptr>
+inline void fill_ft2009(WVEC const& weights, std::vector<std::pair<CutoffType, IndexType> >& table) {
   if (weights.size() == 0)
-    boost::throw_exception(std::range_error("fill_ft2009"));
+    throw std::range_error("fill_ft2009");
   std::size_t n = weights.size();
   std::size_t m = 2;
   while (m < n) m <<= 1;
 
   double norm = 0;
-  BOOST_FOREACH(double w, weights) {
+  for (auto w : weights) {
     if (w < 0)
-      boost::throw_exception(std::invalid_argument("fill_ft2009"));
+      throw std::invalid_argument("fill_ft2009");
     norm += w;
   }
   if (norm <= 0)
-    boost::throw_exception(std::invalid_argument("fill_ft2009"));
+    throw std::invalid_argument("fill_ft2009");
   norm = m / norm;
 
   // Initialize arrays.  We will reorder the elements in `array', so
@@ -152,23 +152,21 @@ inline void fill_ft2009(WVEC const& weights, std::vector<std::pair<CutoffType, I
 
 // Original O(N^2) initialization routine given in A. W. Walker, ACM
 // Trans. Math. Software, 3, 253 (1977).
-template<typename WVEC, typename CutoffType, typename IndexType>
-inline void fill_walker1977(WVEC const& weights,
-  std::vector<std::pair<CutoffType, IndexType> >& table, CutoffType tol = 1.0e-10,
-  typename boost::enable_if<boost::is_float<CutoffType> >::type* = 0,
-  typename boost::enable_if<boost::is_integral<IndexType> >::type* = 0) {
-
+template<typename WVEC, typename CutoffType, typename IndexType,
+  std::enable_if_t<std::is_floating_point<CutoffType>::value, std::nullptr_t> = nullptr,
+  std::enable_if_t<std::is_integral<IndexType>::value, std::nullptr_t> = nullptr>
+inline void fill_walker1977(WVEC const& weights, std::vector<std::pair<CutoffType, IndexType> >& table, CutoffType tol = 1.0e-10) {
   if (weights.size() == 0)
-    boost::throw_exception(std::invalid_argument("fill_walker1977"));
+    throw std::invalid_argument("fill_walker1977");
   std::size_t n = weights.size();
   CutoffType norm = CutoffType(0);
-  BOOST_FOREACH(CutoffType w, weights) {
+  for (auto w : weights) {
     if (w < CutoffType(0))
-      boost::throw_exception(std::invalid_argument("fill_walker1977"));
+      throw std::invalid_argument("fill_walker1977");
     norm += w;
   }
   if (norm <= CutoffType(0))
-    boost::throw_exception(std::invalid_argument("fill_walker1977"));
+    throw std::invalid_argument("fill_walker1977");
   norm = n / norm;
 
   // Initialize arrays.
@@ -299,23 +297,21 @@ public:
 
   template<class CONT>
   void init(CONT const& weights) {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-    BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
-#endif
+    static_assert(std::numeric_limits<IntType>::is_integer);
+    static_assert(!std::numeric_limits<RealType>::is_integer);
     if (weights.size() == 0)
-      boost::throw_exception(std::invalid_argument("random_choice_bsearch::init"));
+      throw std::invalid_argument("random_choice_bsearch::init");
     RealType norm = 0;
-    BOOST_FOREACH(RealType w, weights) {
+    for (auto w : weights) {
       if (w < RealType(0))
-        boost::throw_exception(std::invalid_argument("random_choice_bsearch::init"));
+        throw std::invalid_argument("random_choice_bsearch::init");
       norm += w;
     }
     if (norm <= RealType(0))
-      boost::throw_exception(std::invalid_argument("random_choice_bsearch::init"));
+      throw std::invalid_argument("random_choice_bsearch::init");
     accum_.resize(0);
     double a = 0;
-    BOOST_FOREACH(RealType w, weights) {
+    for (auto w : weights) {
       a += w / norm;
       accum_.push_back(a);
     }
@@ -387,23 +383,21 @@ public:
 
   template<class CONT>
   void init(CONT const& weights) {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-    BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
-#endif
+    static_assert(std::numeric_limits<IntType>::is_integer);
+    static_assert(!std::numeric_limits<RealType>::is_integer);
     if (weights.size() == 0)
-      boost::throw_exception(std::invalid_argument("random_choice_lsearch::init"));
+      throw std::invalid_argument("random_choice_lsearch::init");
     double norm = 0;
-    BOOST_FOREACH(RealType w, weights) {
+    for (auto w : weights) {
       if (w < RealType(0))
-        boost::throw_exception(std::invalid_argument("random_choice_lsearch::init"));
+        throw std::invalid_argument("random_choice_lsearch::init");
       norm += w;
     }
     if (norm <= RealType(0))
-      boost::throw_exception(std::invalid_argument("random_choice_lsearch::init"));
+      throw std::invalid_argument("random_choice_lsearch::init");
     accum_.resize(0);
     double a = 0;
-    BOOST_FOREACH(RealType w, weights) {
+    for (auto w : weights) {
       a += w / norm;
       accum_.push_back(a);
     }
@@ -453,5 +447,3 @@ public:
 };
 
 } // end namespace bcl
-
-#endif // BCL_RANDOM_CHOICE_HPP

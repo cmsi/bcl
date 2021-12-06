@@ -11,11 +11,15 @@ The goal of the BCL is providing
 - Release 0.1 (2013/09/12)
     * Initial version
 
+- Release 0.2 (2021/12/06)
+    * Changed license to Apache 2.0
+    * Removed dependency on Boost library
+
 ## Reference
 
 - H. Suwa and S. Todo, "Markov Chain Monte Carlo Method without Detailed Balance," Physical Review Letters 105, 120603 (2010).
 
 ## Developers
 
-- Hidemaro Suwa (Boston University)
 - Synge Todo (University of Tokyo)
+- Hidemaro Suwa (University of Tokyo)

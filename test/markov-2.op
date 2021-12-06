@@ -1,0 +1,32 @@
+number of bins = 2
+number of samples = 10000000
+[weights]
+1.00077 1.00089 
+[Metropolis]
+bin	weight		result		diff		sigma		diff/sigma
+0	0.49997    	0.49997    	1.11224e-07    	0.0002236    	0.000497426
+1	0.50003    	0.500031    	1.11224e-07    	0.000223614    	0.000497396
+[Metropolis (choose_next)]
+bin	weight		result		diff		sigma		diff/sigma
+0	0.49997    	0.499999    	2.88888e-05    	0.000223606    	0.129195
+1	0.50003    	0.500001    	2.88888e-05    	0.000223607    	0.129194
+[heat bath]
+bin	weight		result		diff		sigma		diff/sigma
+0	0.49997    	0.49979    	0.000179811    	0.00022356    	0.804309
+1	0.50003    	0.50021    	0.000179811    	0.000223654    	0.803971
+[heat bath (choose_next)]
+bin	weight		result		diff		sigma		diff/sigma
+0	0.49997    	0.499971    	1.68878e-06    	0.0002236    	0.00755265
+1	0.50003    	0.500029    	1.68878e-06    	0.000223613    	0.00755222
+[Suwa-Todo 2010]
+bin	weight		result		diff		sigma		diff/sigma
+0	0.49997    	0.499968    	1.31122e-06    	0.0002236    	0.00586416
+1	0.50003    	0.500032    	1.31122e-06    	0.000223614    	0.00586379
+[Suwa-Todo 2010 (choose_next)]
+bin	weight		result		diff		sigma		diff/sigma
+0	0.49997    	0.499971    	1.08878e-06    	0.0002236    	0.00486929
+1	0.50003    	0.500029    	1.08878e-06    	0.000223613    	0.00486901
+[Suwa-Todo 2013]
+bin	weight		result		diff		sigma		diff/sigma
+0	0.49997    	0.49997    	8.87755e-08    	0.0002236    	0.000397028
+1	0.50003    	0.50003    	8.87755e-08    	0.000223614    	0.000397004

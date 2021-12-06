@@ -1,8 +1,3 @@
-#  Copyright Synge Todo 2009 - 2016.
-#  Distributed under the Boost Software License, Version 1.0.
-#      (See accompanying file LICENSE_1_0.txt or copy at
-#          http://www.boost.org/LICENSE_1_0.txt)
-
 find_program(cmd_path ${cmd} ${binarydir} ${dllexedir})
 find_file(input_path ${input}.ip ${binarydir} ${sourcedir})
 find_file(output_path ${output}.op ${binarydir} ${sourcedir})

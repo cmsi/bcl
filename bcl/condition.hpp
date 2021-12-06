@@ -1,17 +1,21 @@
-/*****************************************************************************
-*
-* BCL: Balance Condition Library
-*
-* Copyright (C) 2009-2012 by Hidemaro Suwa <suwamaro@looper.t.u-tokyo.ac.jp>,
-*                            Synge Todo <wistaria@comp-phys.org>
+/*
+   Copyright (C) 2009-2021 by Synge Todo <wistaria@phys.s.u-tokyo.ac.jp>,
+                              Hidemaro Suwa <suwamaro@phys.s.u-tokyo.ac.jp>
 
-* Distributed under the Boost Software License, Version 1.0. (See accompanying
-* file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-*
-*****************************************************************************/
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-#ifndef BCL_CONDITION_HPP
-#define BCL_CONDITION_HPP
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+#pragma once
 
 #include <cmath>
 #include <numeric>
@@ -74,5 +78,3 @@ typename VEC::value_type average_rejection(VEC const& weights, MAT const& transi
 }
 
 } // end namespace bcl
-
-#endif // BCL_CONDITION_HPP
