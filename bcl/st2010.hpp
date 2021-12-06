@@ -29,7 +29,6 @@ public:
   template<class VEC, class MAT>
   static void generate_transition_matrix(VEC const& weights, MAT& tm) {
     using std::abs;
-    typedef typename VEC::value_type value_type;
     std::size_t n = weights.size();
     std::vector<double> accum(n+1, 0);
     double sum = std::accumulate(weights.begin(), weights.end(), 0.0);
