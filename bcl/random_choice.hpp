@@ -448,4 +448,14 @@ public:
   random_choice(const CONT& weights) : base_type(weights) {}
 };
 
+template<>
+class random_choice<long unsigned int> : public detail::random_choice_walker<long unsigned int, unsigned int, double> {
+private:
+  typedef detail::random_choice_walker<long unsigned int, unsigned int, double> base_type;
+public:
+  random_choice() : base_type() {}
+  template<class CONT>
+  random_choice(const CONT& weights) : base_type(weights) {}
+};
+
 } // end namespace bcl
