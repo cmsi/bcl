@@ -3,16 +3,14 @@ include(cmake/prefix.cmake)
 project(bcl CXX)
 include(cmake/postfix.cmake)
 
-option(BCL_INSTALL "Install bcl." ON)
-option(BCL_BUILD_TESTS "Build all bcl's tests." ON)
-option(BCL_BUILD_EXAMPLES "Build all bcl's examples." ON)
-
 include_directories(${PROJECT_SOURCE_DIR})
-include(cmake/add_iotest.cmake)
 
-include(googletest)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  include(cmake/add_iotest.cmake)
+  include(googletest)
+endif()
 FetchContent_MakeAvailable(${FetchContents})
 
-if(BCL_BUILD_TESTS)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   add_subdirectory(test)
-endif(BCL_BUILD_TESTS)
+endif()
